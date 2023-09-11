@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:story_player/ui/player/pages/player_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.title});
@@ -16,10 +17,9 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Playing stories'),
-            ),
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const PlayerPage()),
           );
         },
         child: const Icon(Icons.play_arrow),
