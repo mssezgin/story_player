@@ -124,7 +124,10 @@ class UserService {
           lastName: UserService._lastNames[random.nextInt(UserService._lastNames.length)],
           lastActivityDate: stories
               .map((story) => story.sharedDate)
-              .reduce((date1, date2) => date1.isBefore(date2) ? date2 : date1),
+              .fold(
+                DateTime.fromMillisecondsSinceEpoch(0),
+                (date1, date2) => date1.isBefore(date2) ? date2 : date1
+              ),
           stories: stories,
         );
       },
