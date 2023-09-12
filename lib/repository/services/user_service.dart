@@ -140,7 +140,7 @@ class UserService {
           id: userId * 100 + index,
           userId: userId,
           sharedDate: DateTime.now().subtract(
-            Duration(minutes: random.nextInt(Duration.minutesPerDay * 2)),
+            Duration(minutes: random.nextInt(Duration.minutesPerDay)),
           ),
           // TODO: story type should be random
           storyType: StoryType.image,
