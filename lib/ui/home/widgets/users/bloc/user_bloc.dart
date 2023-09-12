@@ -57,12 +57,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   @override
-  void onChange(Change<UserState> change) {
-    super.onChange(change);
-    debugPrint(change.toString());
-  }
-
-  @override
   void onEvent(UserEvent event) {
     super.onEvent(event);
     debugPrint(event.toString());
