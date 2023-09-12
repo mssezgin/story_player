@@ -1,7 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:story_player/ui/home/pages/home_layout.dart';
 
 void main() {
+  if (kReleaseMode) {
+    debugPrint = (message, {wrapWidth}) {};
+  }
   runApp(const MyApp());
 }
 
