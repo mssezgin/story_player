@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:story_player/repository/services/barrel.dart';
 import 'package:story_player/ui/player/pages/player_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -19,7 +20,14 @@ class HomePage extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const PlayerPage()),
+            MaterialPageRoute(
+              builder: (context) {
+                return const PlayerPage(
+                  isUnseenMode: false,
+                  users: [],
+                );
+              },
+            ),
           );
         },
         child: const Icon(Icons.play_arrow),

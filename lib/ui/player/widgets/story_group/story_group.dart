@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:story_player/repository/models/barrel.dart';
 
 class StoryGroup extends StatelessWidget {
-  const StoryGroup({super.key, required this.title});
+  const StoryGroup({
+    super.key,
+    required this.user,
+  });
 
-  final String title;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text('${user.firstName} ${user.lastName}'),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () {
@@ -21,9 +25,7 @@ class StoryGroup extends StatelessWidget {
       ),
       backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
-      body: Center(
-        child: Image.network('https://picsum.photos/1080/2160'),
-      ),
+      body: Image.network(user.stories[0].fileSource),
     );
   }
 }
