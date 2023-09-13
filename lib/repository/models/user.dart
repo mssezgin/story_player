@@ -16,4 +16,11 @@ class User {
   final String lastName;
   final DateTime lastActivityDate;
   final List<Story> stories;
+
+  String get fullName => '$firstName $lastName';
+
+  bool get isUnseen => stories.any((story) => story.isUnseen);
+
+  List<Story> get unseenStories =>
+      stories.where((story) => story.isUnseen).toList();
 }
