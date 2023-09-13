@@ -14,8 +14,7 @@ class StoryGroup extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('${user.firstName} ${user.lastName}'),
-        leading: IconButton(
-          icon: const Icon(Icons.close),
+        leading: CloseButton(
           onPressed: () {
             Navigator.pop(context);
           },
