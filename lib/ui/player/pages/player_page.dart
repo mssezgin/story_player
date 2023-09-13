@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:story_player/repository/models/barrel.dart';
-import 'package:story_player/ui/player/widgets/story_group/story_group.dart';
+import 'package:story_player/ui/player/widgets/story_group/barrel.dart';
 
 class PlayerPage extends StatelessWidget {
   const PlayerPage({
