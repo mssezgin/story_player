@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_player/ui/home/widgets/users/barrel.dart';
-import 'package:story_player/ui/player/pages/player_page.dart';
+import 'package:story_player/ui/player/pages/barrel.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.title});

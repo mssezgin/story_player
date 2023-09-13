@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:story_player/ui/home/pages/home_layout.dart';
+import 'package:story_player/ui/home/pages/barrel.dart';
 
 void main() {
   if (kReleaseMode) {
