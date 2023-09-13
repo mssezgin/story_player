@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:story_player/repository/services/barrel.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:story_player/ui/home/widgets/users/barrel.dart';
 import 'package:story_player/ui/player/pages/player_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,9 +13,30 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        actions: [
+          IconButton(
+            onPressed: () {
+              debugPrint('Generate random users');
+              context.read<UserBloc>().add(const UserGenerateRandomList());
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Generated random users. Please refresh.'),
+                ),
+              );
+            },
+            icon: const Icon(Icons.shuffle),
+          ),
+          IconButton(
+            onPressed: () {
+              debugPrint('Refresh');
+              context.read<UserBloc>().add(const UserGetAll());
+            },
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
       ),
       body: const Center(
-        child: Text('Home Page'),
+        child: UserList(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
