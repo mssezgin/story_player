@@ -7,13 +7,17 @@ abstract class UserEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class UserGetById extends UserEvent {
-  const UserGetById({required this.id});
+class UserGenerateRandomList extends UserEvent {
+  const UserGenerateRandomList();
+}
 
-  final int id;
+class UserGetById extends UserEvent {
+  const UserGetById({required this.userId});
+
+  final int userId;
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [userId];
 }
 
 class UserGetAll extends UserEvent {

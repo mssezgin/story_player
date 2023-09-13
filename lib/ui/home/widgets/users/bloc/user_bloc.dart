@@ -13,12 +13,30 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc({required UserRepository userRepository})
       : _userRepository = userRepository,
         super(const UserInitial()) {
+    on<UserGenerateRandomList>(_onUserGenerateRandomList);
+    on<UserGetById>(_onUserGetById);
     on<UserGetAll>(_onUserGetAll);
     on<UserGetAllWithAllStories>(_onUserGetAllWithAllStories);
     on<UserGetAllWithUnseenStories>(_onUserGetAllWithUnseenStories);
   }
 
   final UserRepository _userRepository;
+
+  Future<void> _onUserGenerateRandomList(UserGenerateRandomList event, Emitter<UserState> emit) async {
+    await _userRepository.fillUserListRandomly();
+  }
+
+  Future<void> _onUserGetById(UserGetById event, Emitter<UserState> emit) async {
+    emit(const UserLoading());
+    try {
+      User user = await _userRepository.getUserById(event.userId);
+      emit(UserSuccess(users: [user]));
+    } catch (error, stackTrace) {
+      debugPrint(error.toString());
+      debugPrint(stackTrace.toString());
+      emit(UserError(errorMessage: error.toString()));
+    }
+  }
 
   Future<void> _onUserGetAll(UserGetAll event, Emitter<UserState> emit) async {
     emit(const UserLoading());
