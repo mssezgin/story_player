@@ -19,8 +19,13 @@ class User {
 
   String get fullName => '$firstName $lastName';
 
+  String get fullNameInitials => '${firstName[0]}${lastName[0]}';
+
   bool get isUnseen => stories.any((story) => story.isUnseen);
 
   List<Story> get unseenStories =>
       stories.where((story) => story.isUnseen).toList();
+
+  int get firstUnseenStoryIndex =>
+      stories.indexWhere((story) => story.isUnseen);
 }
