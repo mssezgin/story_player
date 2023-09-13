@@ -8,6 +8,21 @@ class HomePage extends StatelessWidget {
 
   final String title;
 
+  void startPlayer(BuildContext context, bool isUnseenMode, int startUserIndex) {
+    context.read<PlayerBloc>().add(
+      PlayerPlay(
+        isUnseenMode: isUnseenMode,
+        startUserIndex: startUserIndex,
+      ),
+    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PlayerPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +31,6 @@ class HomePage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              debugPrint('Generate random users');
               context.read<UserBloc>().add(const UserGenerateRandomList());
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -28,30 +42,17 @@ class HomePage extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              debugPrint('Refresh');
               context.read<UserBloc>().add(const UserGetAll());
             },
             icon: const Icon(Icons.refresh),
           ),
         ],
       ),
-      body: const Center(
-        child: UserList(),
+      body: Center(
+        child: UserList(startPlayer: startPlayer),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return const PlayerPage(
-                  isUnseenMode: false,
-                  users: [],
-                );
-              },
-            ),
-          );
-        },
+        onPressed: () => startPlayer(context, true, 0),
         child: const Icon(Icons.play_arrow),
       ),
     );

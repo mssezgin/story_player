@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_player/repository/models/barrel.dart';
+import 'package:story_player/ui/player/pages/barrel.dart';
 
 class StoryGroup extends StatelessWidget {
   const StoryGroup({
@@ -17,6 +19,7 @@ class StoryGroup extends StatelessWidget {
         leading: CloseButton(
           onPressed: () {
             Navigator.pop(context);
+            context.read<PlayerBloc>().add(const PlayerStop());
           },
         ),
         elevation: 0,
@@ -24,7 +27,7 @@ class StoryGroup extends StatelessWidget {
       ),
       backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
-      body: Image.network(user.stories[0].fileSource),
+      body: Center(child: Image.network(user.stories[0].fileSource)),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:story_player/repository/barrel.dart';
 import 'package:story_player/repository/services/barrel.dart';
 import 'package:story_player/ui/home/pages/barrel.dart';
 import 'package:story_player/ui/home/widgets/users/barrel.dart';
+import 'package:story_player/ui/player/pages/barrel.dart';
 
 void main() {
   if (kReleaseMode) {
@@ -22,10 +23,19 @@ class MyApp extends StatelessWidget {
       create: (context) => UserRepository(
         userService: UserService(),
       ),
-      child: BlocProvider(
-        create: (context) => UserBloc(
-          userRepository: context.read<UserRepository>(),
-        )..add(const UserGetAll()),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => UserBloc(
+              userRepository: context.read<UserRepository>(),
+            )..add(const UserGetAll()),
+          ),
+          BlocProvider(
+            create: (context) => PlayerBloc(
+              userRepository: context.read<UserRepository>(),
+            ),
+          ),
+        ],
         child: MaterialApp(
           title: 'Story Player',
           theme: ThemeData(

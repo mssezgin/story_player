@@ -3,7 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_player/ui/home/widgets/users/barrel.dart';
 
 class UserList extends StatelessWidget {
-  const UserList({super.key});
+  const UserList({
+    super.key,
+    required this.startPlayer,
+  });
+
+  final void Function(BuildContext, bool, int) startPlayer;
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +27,7 @@ class UserList extends StatelessWidget {
             itemBuilder: (context, index) {
               return UserListItem(
                 user: state.users[index],
-                onStartPlayingStories: () {
-                  debugPrint('Playing stories, starting from ${state.users[index].fullName}');
-                },
+                onPressed: () => startPlayer(context, state.users[index].isUnseen, index),
               );
             },
           );
