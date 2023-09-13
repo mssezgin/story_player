@@ -5,14 +5,14 @@ class UserListItem extends StatelessWidget {
   const UserListItem({
     super.key,
     required this.user,
-    required this.onStartPlayingStories,
+    required this.onPressed,
   });
 
   final User user;
-  final void Function() onStartPlayingStories;
+  final VoidCallback onPressed;
 
   String _getUnseenStoryCountString() {
-    return user.isUnseen ? '(${user.unseenStories.length}) ' : '';
+    return '(${user.unseenStories.length}/${user.stories.length}) ';
   }
 
   String _getLastActivityDateString() {
@@ -27,22 +27,32 @@ class UserListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      onPressed: onStartPlayingStories,
+      onPressed: onPressed,
       padding: EdgeInsets.zero,
       elevation: 0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(12),
-            child: CircleAvatar(
-              backgroundColor: Theme.of(context).colorScheme.inverseSurface,
-              radius: 28,
-              child: Text(
-                '${user.firstName[0]}${user.lastName[0]}',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.surface,
+            padding: const EdgeInsets.all(9),
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  width: 3,
+                  color: Theme.of(context).colorScheme.primary,
+                  style: user.isUnseen ?  BorderStyle.solid : BorderStyle.none,
+                ),
+              ),
+              child: CircleAvatar(
+                backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                radius: 28,
+                child: Text(
+                  user.fullNameInitials,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ),
             ),
