@@ -84,7 +84,7 @@ class UserService {
     'Johannes',
     'Rosalind',
     'Louis',
-    'Micael',
+    'Michael',
     'Nicolaus',
     'Leonardo',
     'James',
