@@ -1,0 +1,93 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:story_player/ui/player/pages/barrel.dart';
+import 'package:story_player/ui/player/widgets/story_group/barrel.dart';
+
+class StoryGroupPageView extends StatefulWidget {
+  const StoryGroupPageView({
+    super.key,
+    required this.state,
+  });
+
+  final PlayerPlaying state;
+  final PageTransform pageTransform = const CubicPageTransform();
+
+  @override
+  State<StoryGroupPageView> createState() => _StoryGroupPageViewState();
+}
+
+class _StoryGroupPageViewState extends State<StoryGroupPageView> {
+  late int currentPageIndex;
+  double currentPageDelta = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    currentPageIndex = widget.state.controller.initialPage;
+    widget.state.controller.addListener(() {
+      setState(() {
+        currentPageIndex = widget.state.controller.page!.floor();
+        currentPageDelta = widget.state.controller.page! - currentPageIndex;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var state = widget.state;
+    var pageTransform = widget.pageTransform;
+    return PageView.builder(
+      onPageChanged: (value) {
+        debugPrint('onPageChanged($value)');
+      },
+      scrollDirection: Axis.horizontal,
+      controller: state.controller,
+      itemCount: state.users.length,
+      itemBuilder: (context, index) {
+        var storyGroup = StoryGroup(
+          user: state.users[index],
+          storyController: state.userControllers[index],
+          onPlayPreviousStory: () {
+            debugPrint('onPlayPreviousStory');
+            state.userControllers[index].previousPage(
+              duration: const Duration(microseconds: 1),
+              curve: Curves.linear,
+            );
+          },
+          onPlayNextStory: () {
+            debugPrint('onPlayNextStory');
+            state.userControllers[index].nextPage(
+              duration: const Duration(microseconds: 1),
+              curve: Curves.linear,
+            );
+          },
+          onPlayPreviousUser: () {
+            debugPrint('onPlayPreviousUser');
+            state.controller.previousPage(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeOutQuad,
+            );
+          },
+          onPlayNextUser: () {
+            debugPrint('onPlayNextUser');
+            state.controller.nextPage(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeOutQuad,
+            );
+          },
+          onPause: () {
+            // debugPrint('onPause');
+          },
+          onResume: () {
+            // debugPrint('onResume');
+          },
+          onStop: () {
+            Navigator.pop(context);
+            context.read<PlayerBloc>().add(const PlayerStop());
+          },
+        );
+        return pageTransform.transform(storyGroup, index, currentPageIndex, currentPageDelta);
+      },
+    );
+  }
+}

@@ -21,12 +21,16 @@ class PlayerPlaying extends PlayerState {
     required this.isUnseenMode,
     required this.currentUserIndex,
     required this.currentStoryIndex,
+    required this.controller,
+    required this.userControllers,
   });
 
   final List<User> users;
   final bool isUnseenMode;
   final int currentUserIndex;
   final int currentStoryIndex;
+  final PageController controller;
+  final List<PageController> userControllers;
 
   User get currentUser => users[currentUserIndex];
 
@@ -38,6 +42,7 @@ class PlayerPlaying extends PlayerState {
     isUnseenMode,
     currentUserIndex,
     currentStoryIndex,
+    controller,
   ];
 }
 

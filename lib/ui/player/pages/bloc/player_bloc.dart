@@ -37,6 +37,14 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
           currentStoryIndex: event.isUnseenMode
               ? users[event.startUserIndex].firstUnseenStoryIndex
               : 0,
+          controller: PageController(
+            initialPage: event.startUserIndex,
+          ),
+          userControllers: users
+              .map((user) => PageController(
+                    initialPage: event.isUnseenMode ? user.firstUnseenStoryIndex : 0,
+                  ))
+              .toList(),
         ),
       );
     }

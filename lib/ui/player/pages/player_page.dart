@@ -18,15 +18,7 @@ class PlayerPage extends StatelessWidget {
             return const CircularProgressIndicator();
           }
           if (state is PlayerPlaying) {
-            return PageView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: state.users.length,
-              itemBuilder: (context, index) {
-                return StoryGroup(
-                  user: state.users[index],
-                );
-              },
-            );
+            return StoryGroupPageView(state: state);
           }
           if (state is PlayerPaused) {
             return const Text('Paused.');
