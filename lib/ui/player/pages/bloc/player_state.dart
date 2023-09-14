@@ -34,6 +34,8 @@ class PlayerPlaying extends PlayerState {
 
   User get currentUser => users[currentUserIndex];
 
+  PageController get currentUserController => userControllers[currentUserIndex];
+
   Story get currentStory => currentUser.stories[currentStoryIndex];
 
   @override
@@ -43,7 +45,26 @@ class PlayerPlaying extends PlayerState {
     currentUserIndex,
     currentStoryIndex,
     controller,
+    userControllers,
   ];
+
+  PlayerPlaying copyWith({
+    List<User>? users,
+    bool? isUnseenMode,
+    int? currentUserIndex,
+    int? currentStoryIndex,
+    PageController? controller,
+    List<PageController>? userControllers,
+  }) {
+    return PlayerPlaying(
+      users: users ?? this.users,
+      isUnseenMode: isUnseenMode ?? this.isUnseenMode,
+      currentUserIndex: currentUserIndex ?? this.currentUserIndex,
+      currentStoryIndex: currentStoryIndex ?? this.currentStoryIndex,
+      controller: controller ?? this.controller,
+      userControllers: userControllers ?? this.userControllers,
+    );
+  }
 }
 
 class PlayerPaused extends PlayerState {

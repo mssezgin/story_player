@@ -23,8 +23,16 @@ class PlayerPlay extends PlayerEvent {
       ];
 }
 
+class PlayerPreviousStory extends PlayerEvent {
+  const PlayerPreviousStory();
+}
+
 class PlayerNextStory extends PlayerEvent {
   const PlayerNextStory();
+}
+
+class PlayerPreviousUser extends PlayerEvent {
+  const PlayerPreviousUser();
 }
 
 class PlayerNextUser extends PlayerEvent {

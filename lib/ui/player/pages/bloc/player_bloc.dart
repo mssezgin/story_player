@@ -14,10 +14,16 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
       : _userRepository = userRepository,
         super(const PlayerInitial()) {
     on<PlayerPlay>(_onPlayerPlay);
+    on<PlayerPreviousStory>(_onPlayerPreviousStory);
+    on<PlayerNextStory>(_onPlayerNextStory);
     on<PlayerStop>(_onPlayerStop);
   }
 
   final UserRepository _userRepository;
+  final Curve storyTransitionCurve = Curves.linear;
+  final Duration storyTransitionDuration = const Duration(milliseconds: 1);
+  final Curve storyGroupTransitionCurve = Curves.easeInOut;
+  final Duration storyGroupTransitionDuration = const Duration(milliseconds: 500);
 
   Future<void> _onPlayerPlay(PlayerPlay event, Emitter<PlayerState> emit) async {
     emit(const PlayerLoading());
@@ -47,6 +53,82 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
               .toList(),
         ),
       );
+    }
+  }
+
+  void _onPlayerPreviousStory(PlayerPreviousStory event, Emitter<PlayerState> emit) {
+    PlayerState state = this.state;
+    if (state is PlayerPlaying) {
+
+      int previousStoryIndex = state.currentStoryIndex - 1;
+      if (previousStoryIndex >= 0) {
+        state.currentUserController.previousPage(
+          duration: storyTransitionDuration,
+          curve: storyTransitionCurve,
+        );
+        emit(state.copyWith(
+          currentStoryIndex: previousStoryIndex,
+        ));
+        // TODO: mark story seen
+        return;
+      }
+
+      int previousUserIndex = state.currentUserIndex - 1;
+      if (previousUserIndex >= 0) {
+        state.controller.previousPage(
+          duration: storyGroupTransitionDuration,
+          curve: storyGroupTransitionCurve,
+        );
+        emit(state.copyWith(
+          currentUserIndex: previousUserIndex,
+          // TODO: currentStoryIndex might be taken from relevant page controller
+          currentStoryIndex: state.isUnseenMode
+              ? state.users[previousUserIndex].firstUnseenStoryIndex
+              : 0,
+        ));
+        // TODO: mark story seen
+        return;
+      }
+
+      add(const PlayerStop());
+    }
+  }
+
+  void _onPlayerNextStory(PlayerNextStory event, Emitter<PlayerState> emit) {
+    PlayerState state = this.state;
+    if (state is PlayerPlaying) {
+
+      int nextStoryIndex = state.currentStoryIndex + 1;
+      if (nextStoryIndex < state.currentUser.stories.length) {
+        state.currentUserController.nextPage(
+          duration: storyTransitionDuration,
+          curve: storyTransitionCurve,
+        );
+        emit(state.copyWith(
+          currentStoryIndex: nextStoryIndex,
+        ));
+        // TODO: mark story seen
+        return;
+      }
+
+      int nextUserIndex = state.currentUserIndex + 1;
+      if (nextUserIndex < state.users.length) {
+        state.controller.nextPage(
+          duration: storyGroupTransitionDuration,
+          curve: storyGroupTransitionCurve,
+        );
+        emit(state.copyWith(
+          currentUserIndex: nextUserIndex,
+          // TODO: currentStoryIndex might be taken from relevant page controller
+          currentStoryIndex: state.isUnseenMode
+              ? state.users[nextUserIndex].firstUnseenStoryIndex
+              : 0,
+        ));
+        // TODO: mark story seen
+        return;
+      }
+
+      add(const PlayerStop());
     }
   }
 

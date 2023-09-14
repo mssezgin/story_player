@@ -48,32 +48,16 @@ class _StoryGroupPageViewState extends State<StoryGroupPageView> {
           user: state.users[index],
           storyController: state.userControllers[index],
           onPlayPreviousStory: () {
-            debugPrint('onPlayPreviousStory');
-            state.userControllers[index].previousPage(
-              duration: const Duration(microseconds: 1),
-              curve: Curves.linear,
-            );
+            context.read<PlayerBloc>().add(const PlayerPreviousStory());
           },
           onPlayNextStory: () {
-            debugPrint('onPlayNextStory');
-            state.userControllers[index].nextPage(
-              duration: const Duration(microseconds: 1),
-              curve: Curves.linear,
-            );
+            context.read<PlayerBloc>().add(const PlayerNextStory());
           },
           onPlayPreviousUser: () {
-            debugPrint('onPlayPreviousUser');
-            state.controller.previousPage(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeOutQuad,
-            );
+            // context.read<PlayerBloc>().add(const PlayerPreviousUser());
           },
           onPlayNextUser: () {
-            debugPrint('onPlayNextUser');
-            state.controller.nextPage(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeOutQuad,
-            );
+            // context.read<PlayerBloc>().add(const PlayerNextUser());
           },
           onPause: () {
             // debugPrint('onPause');

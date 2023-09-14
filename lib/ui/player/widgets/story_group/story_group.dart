@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:story_player/repository/models/barrel.dart';
+import 'package:story_player/ui/player/widgets/story_group/barrel.dart';
 
 class StoryGroup extends StatelessWidget {
   const StoryGroup({
@@ -49,6 +50,10 @@ class StoryGroup extends StatelessWidget {
         ],
         elevation: 0,
         backgroundColor: Colors.black38,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4),
+          child: StoryGroupProgressBars(user: user),
+        ),
       ),
       backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
