@@ -21,4 +21,8 @@ class Story {
   Duration duration;
   final StoryType storyType;
   final String fileSource;
+
+  void markSeen() {
+    isUnseen = false;
+  }
 }

@@ -111,12 +111,13 @@ class UserService {
   ];
 
   static List<User> _generateRandomUsers(int userCount) {
+    Random random = Random();
     return List<User>.generate(
       userCount,
       (index) {
-        Random random = Random();
-        int storyCount = random.nextInt(8);
-        List<Story> stories = UserService._generateRandomStories(index, storyCount);
+        int storyCount = random.nextInt(8) + 1;
+        int seenStoryCount = random.nextInt(storyCount);
+        List<Story> stories = UserService._generateRandomStories(index, storyCount, seenStoryCount);
         return User(
           id: index,
           username: 'user.${index.toRadixString(16)}',
@@ -134,11 +135,11 @@ class UserService {
     );
   }
 
-  static List<Story> _generateRandomStories(int userId, int storyCount) {
-    return List<Story>.generate(
+  static List<Story> _generateRandomStories(int userId, int storyCount, int seenStoryCount) {
+    Random random = Random();
+    List<Story> stories = List<Story>.generate(
       storyCount,
       (index) {
-        Random random = Random();
         return Story(
           id: userId * 100 + index,
           userId: userId,
@@ -151,19 +152,42 @@ class UserService {
           fileSource: 'https://picsum.photos/${random.nextInt(1080)}/${random.nextInt(2160)}',
           // TODO: duration should be 5 seconds or video length
           duration: const Duration(seconds: 5),
-          isUnseen: random.nextBool(),
+          isUnseen: true,
         );
       },
     );
+    UserService._sortStories(stories);
+    stories.take(seenStoryCount).forEach((story) => story.markSeen());
+    return stories;
+  }
+
+  static void _sortUsers(List<User> users) {
+    users.sort((user1, user2) {
+      bool user1IsUnseen = user1.isUnseen;
+      bool user2IsUnseen = user2.isUnseen;
+      if (user1IsUnseen == user2IsUnseen) {
+        return user2.lastActivityDate.compareTo(user1.lastActivityDate);
+      }
+      if (user1IsUnseen) {
+        return -1;
+      }
+      return 1;
+    });
+  }
+
+  static void _sortStories(List<Story> stories) {
+    stories.sort((story1, story2) {
+      return story1.sharedDate.compareTo(story2.sharedDate);
+    });
   }
 
   List<User> _allUsers;
 
-  // TODO: sort by unseen and latest activity date
   Future<void> fillUserListRandomly() async {
     Random random = Random();
-    int userCount = random.nextInt(16);
+    int userCount = random.nextInt(16) + 1;
     _allUsers = UserService._generateRandomUsers(userCount);
+    UserService._sortUsers(_allUsers);
   }
 
   Future<User> getUserById(int id) async {
