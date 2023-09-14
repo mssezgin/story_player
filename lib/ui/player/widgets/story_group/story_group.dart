@@ -65,7 +65,10 @@ class StoryGroup extends StatelessWidget {
         itemBuilder: (context, index) {
           switch (user.stories[index].storyType) {
             case StoryType.image:
-              return Image.network(user.stories[index].fileSource);
+              return Image(
+                image: NetworkImage(user.stories[index].fileSource),
+                fit: BoxFit.cover,
+              );
             case StoryType.video:
               return const Text('Video');
             default:
