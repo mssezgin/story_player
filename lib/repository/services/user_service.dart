@@ -76,7 +76,7 @@ class UserService {
     'Galileo',
     'Isaac',
     'Albert',
-    'Carles',
+    'Charles',
     'Marie',
     'Stephan',
     'Nikola',
