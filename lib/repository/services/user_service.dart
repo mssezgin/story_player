@@ -116,7 +116,7 @@ class UserService {
       userCount,
       (index) {
         int storyCount = random.nextInt(8) + 1;
-        int seenStoryCount = random.nextInt(storyCount);
+        int seenStoryCount = random.nextInt(storyCount + 1);
         List<Story> stories = UserService._generateRandomStories(index, storyCount, seenStoryCount);
         return User(
           id: index,
