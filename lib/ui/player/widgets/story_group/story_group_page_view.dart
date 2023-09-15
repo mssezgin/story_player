@@ -38,7 +38,11 @@ class _StoryGroupPageViewState extends State<StoryGroupPageView> {
     var pageTransform = widget.pageTransform;
     return PageView.builder(
       onPageChanged: (value) {
-        debugPrint('onPageChanged($value)');
+        if (value < state.currentUserIndex) {
+          context.read<PlayerBloc>().add(const PlayerPreviousUser());
+        } else if (value > state.currentUserIndex) {
+          context.read<PlayerBloc>().add(const PlayerNextUser());
+        }
       },
       scrollDirection: Axis.horizontal,
       controller: state.controller,
@@ -54,10 +58,10 @@ class _StoryGroupPageViewState extends State<StoryGroupPageView> {
             context.read<PlayerBloc>().add(const PlayerNextStory());
           },
           onPlayPreviousUser: () {
-            // context.read<PlayerBloc>().add(const PlayerPreviousUser());
+            context.read<PlayerBloc>().add(const PlayerPreviousUser());
           },
           onPlayNextUser: () {
-            // context.read<PlayerBloc>().add(const PlayerNextUser());
+            context.read<PlayerBloc>().add(const PlayerNextUser());
           },
           onPause: () {
             // debugPrint('onPause');

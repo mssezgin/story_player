@@ -10,8 +10,6 @@ class PlayerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: BlocBuilder<PlayerBloc, PlayerState>(
-        buildWhen: (previous, current) =>
-            !(previous is PlayerPlaying && current is PlayerPlaying),
         builder: (context, state) {
           if (state is PlayerInitial) {
             return const Text('There are no stories.');

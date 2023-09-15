@@ -16,6 +16,8 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     on<PlayerPlay>(_onPlayerPlay);
     on<PlayerPreviousStory>(_onPlayerPreviousStory);
     on<PlayerNextStory>(_onPlayerNextStory);
+    on<PlayerPreviousUser>(_onPlayerPreviousUser);
+    on<PlayerNextUser>(_onPlayerNextUser);
     on<PlayerStop>(_onPlayerStop);
   }
 
@@ -125,6 +127,42 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
       }
 
       add(const PlayerStop());
+    }
+  }
+
+  void _onPlayerPreviousUser(PlayerPreviousUser event, Emitter<PlayerState> emit) {
+    PlayerState state = this.state;
+    if (state is PlayerPlaying) {
+      int previousUserIndex = state.currentUserIndex - 1;
+      if (previousUserIndex >= 0) {
+        emit(state.copyWith(
+          currentUserIndex: previousUserIndex,
+          // TODO: currentStoryIndex might be taken from relevant page controller
+          // TODO: swiping back and forth between two pages marks stories as seen one by one without rendering them
+          currentStoryIndex: state.isUnseenMode
+              ? state.users[previousUserIndex].firstUnseenStoryIndex
+              : 0,
+        ));
+        return;
+      }
+    }
+  }
+
+  void _onPlayerNextUser(PlayerNextUser event, Emitter<PlayerState> emit) {
+    PlayerState state = this.state;
+    if (state is PlayerPlaying) {
+      int nextUserIndex = state.currentUserIndex + 1;
+      if (nextUserIndex < state.users.length) {
+        emit(state.copyWith(
+          currentUserIndex: nextUserIndex,
+          // TODO: currentStoryIndex might be taken from relevant page controller
+          // TODO: swiping back and forth between two pages marks stories as seen one by one without rendering them
+          currentStoryIndex: state.isUnseenMode
+              ? state.users[nextUserIndex].firstUnseenStoryIndex
+              : 0,
+        ));
+        return;
+      }
     }
   }
 
