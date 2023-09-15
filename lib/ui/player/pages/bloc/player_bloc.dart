@@ -69,7 +69,6 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
         emit(state.copyWith(
           currentStoryIndex: previousStoryIndex,
         ));
-        // TODO: mark story seen
         return;
       }
 
@@ -86,7 +85,6 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
               ? state.users[previousUserIndex].firstUnseenStoryIndex
               : 0,
         ));
-        // TODO: mark story seen
         return;
       }
 
@@ -107,7 +105,6 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
         emit(state.copyWith(
           currentStoryIndex: nextStoryIndex,
         ));
-        // TODO: mark story seen
         return;
       }
 
@@ -124,7 +121,6 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
               ? state.users[nextUserIndex].firstUnseenStoryIndex
               : 0,
         ));
-        // TODO: mark story seen
         return;
       }
 
@@ -145,6 +141,10 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
   @override
   void onTransition(Transition<PlayerEvent, PlayerState> transition) {
     super.onTransition(transition);
+    PlayerState nextState = transition.nextState;
+    if (nextState is PlayerPlaying) {
+      nextState.currentStory.markSeen();
+    }
     debugPrint(transition.toString());
   }
 

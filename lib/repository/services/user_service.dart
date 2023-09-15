@@ -195,17 +195,22 @@ class UserService {
   }
 
   Future<List<User>> getAllUsers() async {
+    UserService._sortUsers(_allUsers);
     return _allUsers;
   }
 
   Future<List<User>> getAllUsersWithAllStories() async {
-    return _allUsers.where((user) => user.stories.isNotEmpty).toList();
+     List<User> allUsersWithAllStories = _allUsers.where((user) => user.stories.isNotEmpty).toList();
+     UserService._sortUsers(allUsersWithAllStories);
+     return allUsersWithAllStories;
   }
 
   Future<List<User>> getAllUsersWithUnseenStories() async {
-    return _allUsers
+    List<User> allUsersWithUnseenStories = _allUsers
         .where((user) => user.stories.isNotEmpty)
         .where((user) => user.stories.any((story) => story.isUnseen))
         .toList();
+    UserService._sortUsers(allUsersWithUnseenStories);
+    return allUsersWithUnseenStories;
   }
 }
