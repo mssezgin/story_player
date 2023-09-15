@@ -149,7 +149,7 @@ class UserService {
           // TODO: story type should be random
           storyType: StoryType.image,
           // TODO: file source should be random according to story type
-          fileSource: 'https://picsum.photos/${random.nextInt(1080)}/${random.nextInt(2160)}',
+          fileSource: 'https://picsum.photos/${random.nextInt(480) + 720 - 480}/${random.nextInt(640) + 1280 - 640}',
           // TODO: duration should be 5 seconds or video length
           duration: const Duration(seconds: 5),
           isUnseen: true,
