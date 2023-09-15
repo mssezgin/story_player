@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              context.read<UserBloc>().add(const UserGetAll());
+              context.read<UserBloc>().add(const UserGetAllWithAllStories());
             },
             icon: const Icon(Icons.refresh),
           ),
