@@ -12,7 +12,7 @@ class UserListItem extends StatelessWidget {
   final VoidCallback onPressed;
 
   String _getUnseenStoryCountString() {
-    return '(${user.unseenStories.length}/${user.stories.length}) ';
+    return user.isUnseen ? '(${user.unseenStories.length}) ' : '';
   }
 
   String _getLastActivityDateString() {
