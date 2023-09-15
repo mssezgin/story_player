@@ -28,7 +28,9 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => UserBloc(
               userRepository: context.read<UserRepository>(),
-            )..add(const UserGetAll()),
+            )
+              ..add(const UserGenerateRandomList())
+              ..add(const UserGetAllWithAllStories()),
           ),
           BlocProvider(
             create: (context) => PlayerBloc(
