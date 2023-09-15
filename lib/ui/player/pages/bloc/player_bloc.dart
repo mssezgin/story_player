@@ -167,6 +167,13 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
   }
 
   void _onPlayerStop(PlayerStop event, Emitter<PlayerState> emit) {
+    PlayerState state = this.state;
+    if (state is PlayerPlaying) {
+      state.controller.dispose();
+      for (PageController userController in state.userControllers) {
+        userController.dispose();
+      }
+    }
     emit(const PlayerInitial());
   }
 
