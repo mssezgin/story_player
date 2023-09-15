@@ -35,7 +35,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
         : await _userRepository.getAllUsersWithAllStories();
 
     if (users.isEmpty) {
-      emit(const PlayerInitial());
+      add(const PlayerStop());
     } else {
       emit(
         PlayerPlaying(

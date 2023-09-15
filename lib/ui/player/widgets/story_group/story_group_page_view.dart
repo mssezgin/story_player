@@ -70,7 +70,6 @@ class _StoryGroupPageViewState extends State<StoryGroupPageView> {
             // debugPrint('onResume');
           },
           onStop: () {
-            Navigator.pop(context);
             context.read<PlayerBloc>().add(const PlayerStop());
           },
         );
