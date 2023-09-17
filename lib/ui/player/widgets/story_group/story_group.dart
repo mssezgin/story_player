@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:story_player/repository/models/barrel.dart';
 import 'package:story_player/ui/player/widgets/story_group/barrel.dart';
+import 'package:video_player/video_player.dart';
 
-class StoryGroup extends StatelessWidget {
+class StoryGroup extends StatefulWidget {
   const StoryGroup({
     super.key,
     required this.user,
@@ -27,33 +28,71 @@ class StoryGroup extends StatelessWidget {
   final VoidCallback onStop;
 
   @override
+  State<StoryGroup> createState() => _StoryGroupState();
+}
+
+class _StoryGroupState extends State<StoryGroup> {
+  VideoPlayerController? videoPlayerController;
+
+  @override
+  void initState() {
+    super.initState();
+    onStoryChanged(widget.storyController.initialPage);
+  }
+
+  @override
+  void dispose() {
+    videoPlayerController?.dispose();
+    super.dispose();
+  }
+
+  void onStoryChanged(int value) {
+    videoPlayerController?.dispose();
+    videoPlayerController = null;
+    var story = widget.user.stories[value];
+    switch (story.storyType) {
+      case StoryType.image:
+        break;
+      case StoryType.video:
+        videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(story.fileSource))
+          ..initialize().then((value) {
+            setState(() {});
+            videoPlayerController!.play();
+          });
+        break;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var user = widget.user;
+    var storyController = widget.storyController;
     return GestureDetector(
       onTapDown: (details) {
         double screenWidth = MediaQuery.of(context).size.width;
         if (details.globalPosition.dx < screenWidth / 2) {
-          onPlayPreviousStory();
+          widget.onPlayPreviousStory();
         } else {
-          onPlayNextStory();
+          widget.onPlayNextStory();
         }
       },
       child: Scaffold(
         appBar: AppBar(
           title: Text('${user.firstName} ${user.lastName}'),
           leading: CloseButton(
-            onPressed: onStop,
+            onPressed: widget.onStop,
           ),
           actions: [
             IconButton(
-              onPressed: onPlayPreviousStory,
+              onPressed: widget.onPlayPreviousStory,
               icon: const Icon(Icons.navigate_before),
             ),
             IconButton(
-              onPressed: onPause,
+              onPressed: widget.onPause,
               icon: const Icon(Icons.pause),
             ),
             IconButton(
-              onPressed: onPlayNextStory,
+              onPressed: widget.onPlayNextStory,
               icon: const Icon(Icons.navigate_next),
             ),
           ],
@@ -67,6 +106,7 @@ class StoryGroup extends StatelessWidget {
         backgroundColor: Colors.black,
         extendBodyBehindAppBar: true,
         body: PageView.builder(
+          onPageChanged: onStoryChanged,
           scrollDirection: Axis.vertical,
           physics: const NeverScrollableScrollPhysics(),
           controller: storyController,
@@ -79,9 +119,24 @@ class StoryGroup extends StatelessWidget {
                   fit: BoxFit.cover,
                 );
               case StoryType.video:
-                return const Text('Video');
+                if (videoPlayerController == null || !videoPlayerController!.value.isInitialized) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return Center(
+                  child: AspectRatio(
+                    aspectRatio: videoPlayerController!.value.aspectRatio,
+                    child: VideoPlayer(videoPlayerController!),
+                  ),
+                );
               default:
-                return const Text('Unsupported story type.');
+                return const Center(
+                  child: Text(
+                    'Unsupported story type.',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
             }
           },
         ),
