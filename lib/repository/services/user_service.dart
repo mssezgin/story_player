@@ -110,6 +110,16 @@ class UserService {
     'Planck',
   ];
 
+  static const String _imageSourceBase = 'https://picsum.photos';
+
+  static const List<String> _videoSources = [
+    'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+    'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+    'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+    'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+  ];
+
   static List<User> _generateRandomUsers(int userCount) {
     Random random = Random();
     return List<User>.generate(
@@ -140,18 +150,22 @@ class UserService {
     List<Story> stories = List<Story>.generate(
       storyCount,
       (index) {
+        StoryType storyType = StoryType.values[random.nextInt(StoryType.values.length)];
         return Story(
           id: userId * 100 + index,
           userId: userId,
           sharedDate: DateTime.now().subtract(
             Duration(minutes: random.nextInt(Duration.minutesPerDay)),
           ),
-          // TODO: story type should be random
-          storyType: StoryType.image,
-          // TODO: file source should be random according to story type
-          fileSource: 'https://picsum.photos/${random.nextInt(480) + 720 - 480}/${random.nextInt(640) + 1280 - 640}',
-          // TODO: duration should be 5 seconds or video length
-          duration: const Duration(seconds: 5),
+          storyType: storyType,
+          fileSource: switch (storyType) {
+            StoryType.image => UserService._generateRandomImageSource(),
+            StoryType.video => UserService._generateRandomVideoSource(),
+          },
+          duration: switch (storyType) {
+            StoryType.image => const Duration(seconds: 5),
+            StoryType.video => const Duration(seconds: 0),
+          },
           isUnseen: true,
         );
       },
@@ -159,6 +173,16 @@ class UserService {
     UserService._sortStories(stories);
     stories.take(seenStoryCount).forEach((story) => story.markSeen());
     return stories;
+  }
+
+  static String _generateRandomImageSource() {
+    Random random = Random();
+    return '${UserService._imageSourceBase}/${random.nextInt(480) + 720 - 480}/${random.nextInt(640) + 1280 - 640}';
+  }
+
+  static String _generateRandomVideoSource() {
+    Random random = Random();
+    return UserService._videoSources[random.nextInt(UserService._videoSources.length)];
   }
 
   static void _sortUsers(List<User> users) {
