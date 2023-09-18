@@ -19,7 +19,9 @@ class PlayerPage extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is PlayerLoading) {
-            return const CircularProgressIndicator();
+            return const CircularProgressIndicator(
+              color: Colors.white,
+            );
           }
           if (state is PlayerPlaying) {
             return StoryGroupPageView(state: state);

@@ -121,7 +121,9 @@ class _StoryGroupState extends State<StoryGroup> {
               case StoryType.video:
                 if (videoPlayerController == null || !videoPlayerController!.value.isInitialized) {
                   return const Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
                   );
                 }
                 return Center(
