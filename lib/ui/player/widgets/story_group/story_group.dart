@@ -68,7 +68,7 @@ class _StoryGroupState extends State<StoryGroup> {
     var user = widget.user;
     var storyController = widget.storyController;
     return GestureDetector(
-      onTapDown: (details) {
+      onTapUp: (details) {
         double screenWidth = MediaQuery.of(context).size.width;
         if (details.globalPosition.dx < screenWidth / 2) {
           widget.onPlayPreviousStory();
