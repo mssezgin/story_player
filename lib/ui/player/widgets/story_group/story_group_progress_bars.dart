@@ -7,9 +7,11 @@ class StoryGroupProgressBars extends StatelessWidget {
   const StoryGroupProgressBars({
     super.key,
     required this.user,
+    required this.animationController,
   });
 
   final User user;
+  final AnimationController animationController;
 
   @override
   Widget build(BuildContext context) {
@@ -19,20 +21,35 @@ class StoryGroupProgressBars extends StatelessWidget {
           return Row(
             children: List.generate(
               user.stories.length,
-                  (index) {
+              (index) {
                 return Flexible(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 2),
                     child: LayoutBuilder(
                       builder: (context, constraints) {
-                        return LinearProgressIndicator(
-                          value: (index < state.currentStoryIndex)
-                              ? 100
-                              : (index > state.currentStoryIndex)
-                              ? 0
-                              : 0.5,
-                          color: Colors.white,
-                          backgroundColor: Colors.white54,
+                        if (index < state.currentStoryIndex) {
+                          return const LinearProgressIndicator(
+                            value: 1,
+                            color: Colors.white,
+                            backgroundColor: Colors.white54,
+                          );
+                        }
+                        if (index > state.currentStoryIndex) {
+                          return const LinearProgressIndicator(
+                            value: 0,
+                            color: Colors.white,
+                            backgroundColor: Colors.white54,
+                          );
+                        }
+                        return AnimatedBuilder(
+                          animation: animationController,
+                          builder: (context, child) {
+                            return LinearProgressIndicator(
+                              value: animationController.value,
+                              color: Colors.white,
+                              backgroundColor: Colors.white54,
+                            );
+                          },
                         );
                       },
                     ),

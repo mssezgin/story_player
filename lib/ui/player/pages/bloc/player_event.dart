@@ -39,14 +39,6 @@ class PlayerNextUser extends PlayerEvent {
   const PlayerNextUser();
 }
 
-class PlayerPause extends PlayerEvent {
-  const PlayerPause();
-}
-
-class PlayerResume extends PlayerEvent {
-  const PlayerResume();
-}
-
 class PlayerStop extends PlayerEvent {
   const PlayerStop();
 }

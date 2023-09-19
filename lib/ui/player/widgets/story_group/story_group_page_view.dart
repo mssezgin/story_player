@@ -63,12 +63,6 @@ class _StoryGroupPageViewState extends State<StoryGroupPageView> {
           onPlayNextUser: () {
             context.read<PlayerBloc>().add(const PlayerNextUser());
           },
-          onPause: () {
-            // debugPrint('onPause');
-          },
-          onResume: () {
-            // debugPrint('onResume');
-          },
           onStop: () {
             context.read<PlayerBloc>().add(const PlayerStop());
           },

@@ -12,8 +12,6 @@ class StoryGroup extends StatefulWidget {
     required this.onPlayNextStory,
     required this.onPlayPreviousUser,
     required this.onPlayNextUser,
-    required this.onPause,
-    required this.onResume,
     required this.onStop,
   });
 
@@ -23,44 +21,72 @@ class StoryGroup extends StatefulWidget {
   final VoidCallback onPlayNextStory;
   final VoidCallback onPlayPreviousUser;
   final VoidCallback onPlayNextUser;
-  final VoidCallback onPause;
-  final VoidCallback onResume;
   final VoidCallback onStop;
 
   @override
   State<StoryGroup> createState() => _StoryGroupState();
 }
 
-class _StoryGroupState extends State<StoryGroup> {
+class _StoryGroupState extends State<StoryGroup> with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
   VideoPlayerController? videoPlayerController;
 
   @override
   void initState() {
     super.initState();
+    animationController = AnimationController(vsync: this);
+    animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        animationController.stop();
+        animationController.reset();
+        widget.onPlayNextStory();
+      }
+    });
     onStoryChanged(widget.storyController.initialPage);
   }
 
   @override
   void dispose() {
+    animationController.dispose();
     videoPlayerController?.dispose();
     super.dispose();
   }
 
   void onStoryChanged(int value) {
+    animationController.stop();
+    animationController.reset();
     videoPlayerController?.dispose();
     videoPlayerController = null;
+
     var story = widget.user.stories[value];
     switch (story.storyType) {
       case StoryType.image:
+        animationController.duration = story.duration;
+        animationController.forward();
+        setState(() {});
         break;
       case StoryType.video:
         videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(story.fileSource))
           ..initialize().then((value) {
             setState(() {});
             videoPlayerController!.play();
+            animationController.duration = videoPlayerController!.value.duration;
+            animationController.forward();
           });
         break;
     }
+  }
+
+  void onPause() {
+    animationController.stop();
+    videoPlayerController?.pause();
+    setState(() {});
+  }
+
+  void onResume() {
+    animationController.forward();
+    videoPlayerController?.play();
+    setState(() {});
   }
 
   @override
@@ -76,6 +102,12 @@ class _StoryGroupState extends State<StoryGroup> {
           widget.onPlayNextStory();
         }
       },
+      onLongPressStart: (details) {
+        onPause();
+      },
+      onLongPressEnd: (details) {
+        onResume();
+      },
       child: Scaffold(
         appBar: AppBar(
           title: Text('${user.firstName} ${user.lastName}'),
@@ -88,8 +120,12 @@ class _StoryGroupState extends State<StoryGroup> {
               icon: const Icon(Icons.navigate_before),
             ),
             IconButton(
-              onPressed: widget.onPause,
-              icon: const Icon(Icons.pause),
+              onPressed: (animationController.isAnimating)
+                  ? onPause
+                  : onResume,
+              icon: (animationController.isAnimating)
+                  ? const Icon(Icons.pause)
+                  : const Icon(Icons.play_arrow),
             ),
             IconButton(
               onPressed: widget.onPlayNextStory,
@@ -100,7 +136,10 @@ class _StoryGroupState extends State<StoryGroup> {
           backgroundColor: Colors.black38,
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(4),
-            child: StoryGroupProgressBars(user: user),
+            child: StoryGroupProgressBars(
+              user: user,
+              animationController: animationController,
+            ),
           ),
         ),
         backgroundColor: Colors.black,

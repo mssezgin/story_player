@@ -66,7 +66,3 @@ class PlayerPlaying extends PlayerState {
     );
   }
 }
-
-class PlayerPaused extends PlayerState {
-  const PlayerPaused();
-}

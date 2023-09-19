@@ -26,9 +26,6 @@ class PlayerPage extends StatelessWidget {
           if (state is PlayerPlaying) {
             return StoryGroupPageView(state: state);
           }
-          if (state is PlayerPaused) {
-            return const Text('Paused.');
-          }
           return const SizedBox();
         },
       ),
