@@ -50,6 +50,7 @@ class _StoryGroupPageViewState extends State<StoryGroupPageView> {
       itemBuilder: (context, index) {
         var storyGroup = StoryGroup(
           user: state.users[index],
+          currentStoryIndex: state.currentStoryIndex,
           storyController: state.userControllers[index],
           onPlayPreviousStory: () {
             context.read<PlayerBloc>().add(const PlayerPreviousStory());

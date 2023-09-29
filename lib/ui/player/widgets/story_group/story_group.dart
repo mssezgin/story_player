@@ -7,6 +7,7 @@ class StoryGroup extends StatefulWidget {
   const StoryGroup({
     super.key,
     required this.user,
+    required this.currentStoryIndex,
     required this.storyController,
     required this.onPlayPreviousStory,
     required this.onPlayNextStory,
@@ -16,6 +17,7 @@ class StoryGroup extends StatefulWidget {
   });
 
   final User user;
+  final int currentStoryIndex;
   final PageController storyController;
   final VoidCallback onPlayPreviousStory;
   final VoidCallback onPlayNextStory;
@@ -92,6 +94,7 @@ class _StoryGroupState extends State<StoryGroup> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     var user = widget.user;
+    var currentStoryIndex = widget.currentStoryIndex;
     var storyController = widget.storyController;
     return GestureDetector(
       onTapUp: (details) {
@@ -139,9 +142,10 @@ class _StoryGroupState extends State<StoryGroup> with SingleTickerProviderStateM
           elevation: 0,
           backgroundColor: Colors.black38,
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(4),
+            preferredSize: const Size.fromHeight(8),
             child: StoryGroupProgressBars(
-              user: user,
+              currentIndex: currentStoryIndex,
+              count: user.stories.length,
               animationController: animationController,
             ),
           ),
