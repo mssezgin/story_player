@@ -97,8 +97,12 @@ class _StoryGroupState extends State<StoryGroup> with SingleTickerProviderStateM
       onTapUp: (details) {
         double screenWidth = MediaQuery.of(context).size.width;
         if (details.globalPosition.dx < screenWidth / 2) {
+          animationController.stop();
+          animationController.reset();
           widget.onPlayPreviousStory();
         } else {
+          animationController.stop();
+          animationController.reset();
           widget.onPlayNextStory();
         }
       },
