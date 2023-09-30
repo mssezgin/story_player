@@ -23,20 +23,26 @@ class PlayerPlay extends PlayerEvent {
       ];
 }
 
-class PlayerPreviousStory extends PlayerEvent {
-  const PlayerPreviousStory();
-}
-
-class PlayerNextStory extends PlayerEvent {
-  const PlayerNextStory();
-}
-
 class PlayerPreviousUser extends PlayerEvent {
-  const PlayerPreviousUser();
+  const PlayerPreviousUser({
+    required this.isControlled,
+  });
+
+  final bool isControlled;
+
+  @override
+  List<Object?> get props => [isControlled];
 }
 
 class PlayerNextUser extends PlayerEvent {
-  const PlayerNextUser();
+  const PlayerNextUser({
+    required this.isControlled,
+  });
+
+  final bool isControlled;
+
+  @override
+  List<Object?> get props => [isControlled];
 }
 
 class PlayerStop extends PlayerEvent {

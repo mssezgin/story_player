@@ -24,7 +24,12 @@ class PlayerPage extends StatelessWidget {
             );
           }
           if (state is PlayerPlaying) {
-            return StoryGroupPageView(state: state);
+            return StoryGroupPageView(
+              state: state,
+              onClose: () {
+                context.read<PlayerBloc>().add(const PlayerStop());
+              },
+            );
           }
           return const SizedBox();
         },

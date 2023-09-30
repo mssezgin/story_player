@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class StoryGroupProgressBars extends StatelessWidget {
-  const StoryGroupProgressBars({
+class StoryProgressBars extends StatelessWidget {
+  const StoryProgressBars({
     super.key,
     required this.currentIndex,
     required this.count,

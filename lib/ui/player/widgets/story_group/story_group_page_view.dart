@@ -7,10 +7,13 @@ class StoryGroupPageView extends StatefulWidget {
   const StoryGroupPageView({
     super.key,
     required this.state,
+    required this.onClose,
+    this.pageTransform = const CubicPageTransform(),
   });
 
   final PlayerPlaying state;
-  final PageTransform pageTransform = const CubicPageTransform();
+  final VoidCallback onClose;
+  final PageTransform pageTransform;
 
   @override
   State<StoryGroupPageView> createState() => _StoryGroupPageViewState();
@@ -39,36 +42,32 @@ class _StoryGroupPageViewState extends State<StoryGroupPageView> {
     return PageView.builder(
       onPageChanged: (value) {
         if (value < state.currentUserIndex) {
-          context.read<PlayerBloc>().add(const PlayerPreviousUser());
+          context.read<PlayerBloc>().add(const PlayerPreviousUser(
+            isControlled: false,
+          ));
         } else if (value > state.currentUserIndex) {
-          context.read<PlayerBloc>().add(const PlayerNextUser());
+          context.read<PlayerBloc>().add(const PlayerNextUser(
+            isControlled: false,
+          ));
         }
       },
       scrollDirection: Axis.horizontal,
       controller: state.controller,
       itemCount: state.users.length,
       itemBuilder: (context, index) {
-        var storyGroup = StoryGroup(
-          user: state.users[index],
-          currentStoryIndex: state.currentStoryIndex,
-          storyController: state.userControllers[index],
-          onPlayPreviousStory: () {
-            context.read<PlayerBloc>().add(const PlayerPreviousStory());
-          },
-          onPlayNextStory: () {
-            context.read<PlayerBloc>().add(const PlayerNextStory());
-          },
-          onPlayPreviousUser: () {
-            context.read<PlayerBloc>().add(const PlayerPreviousUser());
-          },
-          onPlayNextUser: () {
-            context.read<PlayerBloc>().add(const PlayerNextUser());
-          },
-          onStop: () {
-            context.read<PlayerBloc>().add(const PlayerStop());
-          },
+        var page = BlocProvider(
+          create: (context) => StoryGroupBloc(
+            user: state.users[index],
+            playerBloc: context.read<PlayerBloc>(),
+          )
+            ..add(StoryGroupPlay(isUnseenMode: state.isUnseenMode)),
+          child: Center(
+            child: StoryGroupPage(
+              onClose: widget.onClose,
+            ),
+          ),
         );
-        return pageTransform.transform(storyGroup, index, currentPageIndex, currentPageDelta);
+        return pageTransform.transform(page, index, currentPageIndex, currentPageDelta);
       },
     );
   }
