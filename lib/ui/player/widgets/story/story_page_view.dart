@@ -152,24 +152,6 @@ class _StoryPageViewState extends State<StoryPageView> with SingleTickerProvider
             leading: CloseButton(
               onPressed: widget.onClose,
             ),
-            actions: [
-              IconButton(
-                onPressed: playPreviousStory,
-                icon: const Icon(Icons.navigate_before),
-              ),
-              IconButton(
-                onPressed: (animationController.isAnimating)
-                    ? pause
-                    : resume,
-                icon: (animationController.isAnimating)
-                    ? const Icon(Icons.pause)
-                    : const Icon(Icons.play_arrow),
-              ),
-              IconButton(
-                onPressed: playNextStory,
-                icon: const Icon(Icons.navigate_next),
-              ),
-            ],
             elevation: 0,
             backgroundColor: Colors.black38,
             bottom: PreferredSize(
