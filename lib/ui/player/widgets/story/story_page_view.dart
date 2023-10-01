@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_player/repository/models/barrel.dart';
 import 'package:story_player/ui/player/widgets/story/barrel.dart';
 import 'package:story_player/ui/player/widgets/story_group/barrel.dart';
+import 'package:story_player/ui/player/widgets/story_group/story_group_page_title.dart';
 import 'package:video_player/video_player.dart';
 
 class StoryPageView extends StatefulWidget {
@@ -148,9 +149,13 @@ class _StoryPageViewState extends State<StoryPageView> with SingleTickerProvider
         },
         child: Scaffold(
           appBar: AppBar(
-            title: Text(widget.state.user.fullName),
             leading: CloseButton(
               onPressed: widget.onClose,
+            ),
+            titleSpacing: -4,
+            title: StoryGroupPageTitle(
+              user: widget.state.user,
+              currentStory: widget.state.currentStory,
             ),
             elevation: 0,
             backgroundColor: Colors.black38,
