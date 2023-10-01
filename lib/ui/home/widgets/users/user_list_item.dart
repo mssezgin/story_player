@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:story_player/helpers/date_time_extension.dart';
 import 'package:story_player/repository/models/barrel.dart';
 import 'package:story_player/ui/common/widgets/user_profile_avatar.dart';
 
@@ -14,15 +15,6 @@ class UserListItem extends StatelessWidget {
 
   String _getUnseenStoryCountString() {
     return user.isUnseen ? '(${user.unseenStories.length}) ' : '';
-  }
-
-  String _getLastActivityDateString() {
-    Duration timeDifference = DateTime.now().difference(user.lastActivityDate);
-    if (timeDifference.inHours > 0) {
-      return '${timeDifference.inHours} hours ago';
-    } else {
-      return '${timeDifference.inMinutes} minutes ago';
-    }
   }
 
   @override
@@ -63,7 +55,7 @@ class UserListItem extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                _getLastActivityDateString(),
+                user.lastActivityDate.toStringFromNow(),
                 style: const TextStyle(
                   fontWeight: FontWeight.normal,
                 ),
