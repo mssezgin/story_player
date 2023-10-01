@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:story_player/repository/models/barrel.dart';
+import 'package:story_player/ui/common/widgets/user_profile_avatar.dart';
 
 class UserListItem extends StatelessWidget {
   const UserListItem({
@@ -44,16 +45,9 @@ class UserListItem extends StatelessWidget {
                   style: user.isUnseen ?  BorderStyle.solid : BorderStyle.none,
                 ),
               ),
-              child: CircleAvatar(
-                backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+              child: UserProfileAvatar(
+                user: user,
                 radius: 28,
-                child: Text(
-                  user.fullNameInitials,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
               ),
             ),
           ),

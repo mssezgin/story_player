@@ -6,6 +6,7 @@ class User {
     required this.username,
     required this.firstName,
     required this.lastName,
+    required this.profileImageSource,
     required this.lastActivityDate,
     this.stories = const [],
   });
@@ -14,6 +15,7 @@ class User {
   final String username;
   final String firstName;
   final String lastName;
+  final String? profileImageSource;
   final DateTime lastActivityDate;
   final List<Story> stories;
 

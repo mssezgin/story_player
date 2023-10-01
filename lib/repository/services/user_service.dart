@@ -11,6 +11,7 @@ class UserService {
       username: 'user.1',
       firstName: 'First',
       lastName: 'User',
+      profileImageSource: null,
       lastActivityDate: DateTime.now().subtract(const Duration(hours: 3)),
       stories: [],
     ),
@@ -19,6 +20,7 @@ class UserService {
       username: 'user.2',
       firstName: 'Second',
       lastName: 'User',
+      profileImageSource: null,
       lastActivityDate: DateTime.now().subtract(const Duration(minutes: 30)),
       stories: [],
     ),
@@ -27,6 +29,7 @@ class UserService {
       username: 'user.3',
       firstName: 'Third',
       lastName: 'User',
+      profileImageSource: null,
       lastActivityDate: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
       stories: [],
     ),
@@ -35,6 +38,7 @@ class UserService {
       username: 'user.4',
       firstName: 'Fourth',
       lastName: 'User',
+      profileImageSource: null,
       lastActivityDate: DateTime.now().subtract(const Duration(hours: 1, minutes: 30)),
       stories: [],
     ),
@@ -43,6 +47,7 @@ class UserService {
       username: 'user.5',
       firstName: 'Fifth',
       lastName: 'User',
+      profileImageSource: null,
       lastActivityDate: DateTime.now().subtract(const Duration(minutes: 1)),
       stories: [],
     ),
@@ -51,6 +56,7 @@ class UserService {
       username: 'user.6',
       firstName: 'Sixth',
       lastName: 'User',
+      profileImageSource: null,
       lastActivityDate: DateTime.now().subtract(const Duration(hours: 2)),
       stories: [],
     ),
@@ -59,6 +65,7 @@ class UserService {
       username: 'user.7',
       firstName: 'Seventh',
       lastName: 'User',
+      profileImageSource: null,
       lastActivityDate: DateTime.now().subtract(const Duration(minutes: 45)),
       stories: [],
     ),
@@ -67,6 +74,7 @@ class UserService {
       username: 'user.8',
       firstName: 'Eighth',
       lastName: 'User',
+      profileImageSource: null,
       lastActivityDate: DateTime.now().subtract(const Duration(hours: 12)),
       stories: [],
     ),
@@ -110,6 +118,8 @@ class UserService {
     'Planck',
   ];
 
+  static const String _profileImageSourceBase = 'https://randomuser.me/api/portraits/med';
+
   static const String _imageSourceBase = 'https://picsum.photos';
 
   static const List<String> _videoSources = [
@@ -133,6 +143,9 @@ class UserService {
           username: 'user.${index.toRadixString(16)}',
           firstName: UserService._firstNames[random.nextInt(UserService._firstNames.length)],
           lastName: UserService._lastNames[random.nextInt(UserService._lastNames.length)],
+          profileImageSource: random.nextBool()
+              ? UserService._generateRandomProfileImageSource()
+              : null,
           lastActivityDate: stories
               .map((story) => story.sharedDate)
               .fold(
@@ -173,6 +186,11 @@ class UserService {
     UserService._sortStories(stories);
     stories.take(seenStoryCount).forEach((story) => story.markSeen());
     return stories;
+  }
+
+  static String _generateRandomProfileImageSource() {
+    Random random = Random();
+    return '${UserService._profileImageSourceBase}/${random.nextBool() ? 'men' : 'women'}/${random.nextInt(90)}.jpg';
   }
 
   static String _generateRandomImageSource() {
